@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-    fetchBooks();
+    // fetchBooks();
     const searchBtn = document.querySelector("#search_btn");
     searchBtn.addEventListener("click", () => {
         let searchTerm = document.querySelector("#search_term").value;
         // debugger
+        let container = document.querySelector("#container");
+        container.innerText = "";
         searchForBook(searchTerm)
     })
 })
@@ -15,7 +17,7 @@ function fetchBooks() {
 }
 
 function renderBook(book) {
-    console.log(book);
+    // console.log(book);
     const container = document.querySelector("#container");
     const bookDiv = document.createElement("div");
     bookDiv.classList.add("book")
@@ -25,33 +27,54 @@ function renderBook(book) {
     bookDescDiv.classList.add("book_desc");
     const bookImgDiv = document.createElement("img");
     bookImgDiv.classList.add("book_img");
-    bookTitleDiv.innerText = book.title;
-    bookDescDiv.innerText = book.description;
-    bookImgDiv.src = book.image;
+    bookTitleDiv.innerText = book.volumeInfo.title;
+    bookDescDiv.innerText = book.volumeInfo.description;
+    bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
     const watchlistBtn = document.createElement("button");
     watchlistBtn.classList.add("watchlist_btn");
     watchlistBtn.innerText = "Add to watchlist";
-    watchlistBtn.addEventListener("click", addToWatchlist(book));
+    watchlistBtn.addEventListener("click", () => {
+        let newBook = createBook(book)
+        addToWatchlist(newBook)
+    });
     bookDiv.append(bookTitleDiv, bookDescDiv, bookImgDiv, watchlistBtn);
     container.appendChild(bookDiv);
 }
 
+function createBook(book) {
+    let bookData = {
+        title: book.volumeInfo.title,
+        description: book.volumeInfo.description,
+        image: book.volumeInfo.imageLinks.smallThumbnail
+    }
+    return fetch("http://localhost:3000/books", { 
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(bookData)
+    }).then(response => response.json())
+}
+
 function addToWatchlist(book) {
-    // let data = {
-    //     user_id: user.id,
-    //     book_id: book.id
-    // }
-    // fetch("http://localhost:3000/watchlists", {
-    //     method: "POST", 
-    //     headers: {
-    //         "application/json"
-    //     }
-    //     body: JSON.stringify()
-    // }).then(response => response.json())
+    
+    debugger;
+
+    let data = {
+        user_id: 1,
+        book_id: 1//newBook.id
+    }
+    fetch("http://localhost:3000/watchlists", {
+        method: "POST", 
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
 }
 
 function searchForBook(searchTerm) {
     fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`)
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(json => json.items.forEach(book => renderBook(book)))
 }
