@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBtn = document.querySelector("#search_btn");
     searchBtn.addEventListener("click", () => {
         let searchTerm = document.querySelector("#search_term").value;
-        // debugger
         let container = document.querySelector("#container");
         container.innerText = "";
         searchForBook(searchTerm)
@@ -17,7 +16,6 @@ function fetchBooks() {
 }
 
 function renderBook(book) {
-    // console.log(book);
     const container = document.querySelector("#container");
     const bookDiv = document.createElement("div");
     bookDiv.classList.add("book")
@@ -32,38 +30,39 @@ function renderBook(book) {
     bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
     const watchlistBtn = document.createElement("button");
     watchlistBtn.classList.add("watchlist_btn");
+    watchlistBtn.dataset.id = 1;
     watchlistBtn.innerText = "Add to watchlist";
     watchlistBtn.addEventListener("click", () => {
-        let newBook = createBook(book)
-        addToWatchlist(newBook)
+        createBook(book)
     });
     bookDiv.append(bookTitleDiv, bookDescDiv, bookImgDiv, watchlistBtn);
     container.appendChild(bookDiv);
 }
 
 function createBook(book) {
+    let id = event.currentTarget.dataset.id
     let bookData = {
         title: book.volumeInfo.title,
         description: book.volumeInfo.description,
-        image: book.volumeInfo.imageLinks.smallThumbnail
+        image: book.volumeInfo.imageLinks.smallThumbnail,
+        id: id
     }
-    return fetch("http://localhost:3000/books", { 
+    return fetch("http://localhost:3000/watchlists", { 
         method: "POST", 
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(bookData)
-    }).then(response => response.json())
+    }).then(response => response.json()).then(data => console.log(data))
 }
 
 function addToWatchlist(book) {
-    
-    debugger;
-
+    debugger
     let data = {
         user_id: 1,
-        book_id: 1//newBook.id
+        book_id: book.id
     }
+    debugger;
     fetch("http://localhost:3000/watchlists", {
         method: "POST", 
         headers: {
