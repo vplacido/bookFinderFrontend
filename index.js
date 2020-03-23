@@ -1,13 +1,77 @@
 document.addEventListener("DOMContentLoaded", () => {
     // fetchBooks();
+    loginPage()
+    const form = document.querySelector("form");
+    let userObject = {} 
+    form.addEventListener("submit", (event) => {
+        event.preventDefault()
+        const username = event.currentTarget.querySelector("input").value
+
+        fetch("http://localhost:3000/users").then(response => response.json())
+            .then(json => json.forEach(user => {
+        if  (username === user.username) {
+            const div = document.querySelector("#login");
+            div.parentNode.removeChild(div)
+            userObject = user;
+            // console.log(userObject)
+            return user;
+        }
+    }))
+    debugger;
+    })
+    
+    
     const searchBtn = document.querySelector("#search_btn");
-    searchBtn.addEventListener("click", () => {
+    searchBtn.addEventListener("click", (userObject) => {
+        debugger
+        whatUser(userObject);
         let searchTerm = document.querySelector("#search_term").value;
         let container = document.querySelector("#container");
         container.innerText = "";
         searchForBook(searchTerm)
     })
 })
+
+function whatUser(userObject){
+    console.log(userObject);
+}
+
+function loginPage() {
+    const div = document.querySelector("#login");
+    const h1 = document.createElement("h1");
+    const form = document.createElement("form");
+    const input = document.createElement("input");
+    const submit = document.createElement("input");
+    h1.innerText = "Login with a username";
+    form.classList = "login_form";
+    input.placeholder = "username";
+    submit.type = "submit";
+    // form.addEventListener("submit", (event) => {
+    //     event.preventDefault()
+    //     const username = event.currentTarget.querySelector("input").value
+    //     fetch("http://localhost:3000/users").then(response => response.json())
+    // .then(json => json.forEach(user => {
+    //     if  (username === user.username) {
+    //         // const searchBtn = document.querySelector("#search_btn");
+    //         // searchBtn.addEventListener("click", () => {
+    //         //     let searchTerm = document.querySelector("#search_term").value;
+    //         //     let container = document.querySelector("#container");
+    //         //     container.innerText = "";
+    //         //     searchForBook(searchTerm)
+    //         // })
+    //         // element.parentNode.removeChild(element);
+    //         const div = document.querySelector("#login");
+    //         div.parentNode.removeChild(div)
+    //         return user;
+    //     } //else {
+    //     //     alert("Invalid Username")
+    //     // }
+    //     // console.log(user)
+    // }))
+    // })
+    form.append(input, submit);
+    div.append(h1, form);
+}
 
 function fetchBooks() {
     fetch("http://localhost:3000/books")
