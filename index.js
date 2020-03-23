@@ -1,5 +1,6 @@
+//super strech function: find a way to logout the user from the application without reloading the page
+
 document.addEventListener("DOMContentLoaded", () => {
-    // fetchBooks();
     loginPage()
     const form = document.querySelector("form");
     let userObject = {} 
@@ -7,21 +8,64 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault()
         const username = event.currentTarget.querySelector("input").value
         fetch("http://localhost:3000/users").then(response => response.json())
-            .then(json => json.forEach(user => {
+            .then(json => { 
+        let isfound = false;
+        json.forEach(user => {
         if  (username == user.username) {
             const div = document.querySelector("#login");
-            div.parentNode.removeChild(div);
+            // div.parentNode.removeChild(div);
+            div.innerHTML = ""
             userObject = user;
             const watchListBtn = document.createElement("button");
             watchListBtn.innerText = "My WatchList";
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
             const header = document.querySelector("#header");
-            header.appendChild(watchListBtn);
+            const logout = document.createElement("button");
+            logout.innerText = "Logout";
+            logout.addEventListener("click", () => { 
+                userObject = null;
+                const container = document.querySelector("#container");
+                container.innerHTML = "";
+                header.innerHTML = ""
+                loginPage()
+            })
+            header.append(watchListBtn, logout);
+            isfound = true;
             return user;
+        } 
+    })
+        if (!isfound) {
+            fetch("http://localhost:3000/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({username: username})
+        }).then(response => response.json()).then(json => {
+            const div = document.querySelector("#login");
+            // debugger
+            // div.parentNode.removeChild(div);
+            div.innerHTML = "";
+            userObject = json;
+            const watchListBtn = document.createElement("button");
+            watchListBtn.innerText = "My WatchList";
+            watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
+            const header = document.querySelector("#header");
+            const logout = document.createElement("button");
+            logout.innerText = "Logout";
+            logout.addEventListener("click", () => { 
+                userObject = null;
+                const container = document.querySelector("#container");
+                container.innerHTML = "";
+                header.innerHTML = "";
+                loginPage()
+            })
+            header.append(watchListBtn, logout);
+            return json;
+        })
         }
-        //if username is not found in database create the user with uthe username 
-        //fetcj(url/user, {method:POST})
-    }))
+
+})
     })
     
     const searchBtn = document.querySelector("#search_btn");
