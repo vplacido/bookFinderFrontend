@@ -19,6 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
             header.appendChild(watchListBtn);
             return user;
         }
+
+        
     }))
     })
     
