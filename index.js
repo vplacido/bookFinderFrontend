@@ -1,6 +1,7 @@
 //super strech function: find a way to logout the user from the application without reloading the page
 
-//if the user searches for a book via genre do not use text snippet only description
+//fix width of row with only one book
+
 document.addEventListener("DOMContentLoaded", () => {
     loginPage()
     const form = document.querySelector("form");
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userObject = user;
             const watchListBtn = document.createElement("button");
             watchListBtn.innerText = "My WatchList";
+            watchListBtn.style = "margin-left: 850px;"
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
             const header = document.querySelector("#header");
             const logout = document.createElement("button");
@@ -52,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
             userObject = json;
             const watchListBtn = document.createElement("button");
             watchListBtn.innerText = "My WatchList";
+            watchListBtn.style = "margin-left: 850px;";
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
             const header = document.querySelector("#header");
             const logout = document.createElement("button");
@@ -72,7 +75,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
     })
-    
     const searchBtn = document.querySelector("#search_btn");
     searchBtn.addEventListener("click", () => {
         whatUser(userObject);
@@ -127,10 +129,17 @@ function renderWatchlist(userObject) {
             watchlistDeleteBtn.addEventListener("click", () => deleteWatchlist(userObject, b, watchlistIdArray[bookIdArray.indexOf(b.id)]));
             bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
             bookTitleDiv.innerText = b.title;
-            bookDescDiv.innerText = b.description;
+            // bookDescDiv.innerText = b.description;
+            if (!!b.snippet) {
+                bookDescDiv.innerText = b.snippet
+            }else {
+                bookDescDiv.innerText = b.description;
+            }
             bookImgDiv.src = b.image;
+            debugger;
+            bookImgDiv.addEventListener("click", () => showBook(b, userObject))
             newImgDiv.appendChild(bookImgDiv);
-            newImgDiv.style = `background: url(${bookImgDiv.src});`
+            // newImgDiv.style = `background: url(${bookImgDiv.src});`
             bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistDeleteBtn);
             row.appendChild(bookDiv);
             container.appendChild(row)//bookDiv);
@@ -163,6 +172,7 @@ function loginPage() {
     h1.innerText = "Login with a username";
     form.classList = "login_form";
     input.placeholder = "username";
+    input.required = true;
     submit.type = "submit";
     form.append(input, submit);
     div.append(h1, form);
@@ -191,7 +201,12 @@ function renderBook(book, userObject) {
     const bookImgDiv = document.createElement("img");
     bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
     bookTitleDiv.innerText = book.volumeInfo.title;
-    bookDescDiv.innerText = book.searchInfo.textSnippet// .volumeInfo.description;
+    // debugger;
+    if ("searchInfo" in book) {
+        bookDescDiv.innerText = book.searchInfo.textSnippet
+    }else {
+        bookDescDiv.innerText = book.volumeInfo.description;
+    }
     bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
     bookImgDiv.addEventListener("click", () => showBook(book, userObject))
     const watchlistBtn = document.createElement("button");
@@ -202,7 +217,7 @@ function renderBook(book, userObject) {
         createBook(book, userObject)
     });
     newImgDiv.appendChild(bookImgDiv);
-    newImgDiv.style = `background: url(${bookImgDiv.src});`
+    // newImgDiv.style = `background: url(${bookImgDiv.src});`
     bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistBtn);
     row.appendChild(bookDiv);
     container.appendChild(row)//bookDiv);
@@ -210,11 +225,39 @@ function renderBook(book, userObject) {
 
 function createBook(book, userObject) {
     let id = event.currentTarget.dataset.id
-    let bookData = {
-        title: book.volumeInfo.title,
-        description: book.volumeInfo.description,
-        image: book.volumeInfo.imageLinks.smallThumbnail,
-        id: userObject.id//id
+    let bookData = {}
+    if ("searchInfo" in book && book.saleInfo.saleability === "FOR_SALE") {
+        bookData = {
+            title: book.volumeInfo.title,
+            description: book.volumeInfo.description,
+            image: book.volumeInfo.imageLinks.smallThumbnail,
+            snippet: book.searchInfo.textSnippet,
+            publisher: book.volumeInfo.publisher,
+            published_date: book.volumeInfo.publishedDate,
+            isbn: book.volumeInfo.industryIdentifiers[1].identifier,
+            category: book.volumeInfo.categories[0],
+            rating: book.volumeInfo.averageRating,
+            price: book.saleInfo.listPrice.amount,
+            preview_link: book.volumeInfo.previewLink,
+            id: userObject.id//id
+        }
+        // debugger;
+    }else {
+        bookData = {
+            title: book.volumeInfo.title,
+            description: book.volumeInfo.description,
+            image: book.volumeInfo.imageLinks.smallThumbnail,
+            snippet: null,
+            snippet: book.searchInfo.textSnippet,
+            publisher: book.volumeInfo.publisher,
+            published_date: book.volumeInfo.publishedDate,
+            isbn: null,
+            category: null,
+            rating: null,
+            price: null,
+            preview_link: null,
+            id: userObject.id//id
+        }
     }
     return fetch("http://localhost:3000/watchlists", { 
         method: "POST", 
@@ -226,6 +269,7 @@ function createBook(book, userObject) {
 }
 
 function searchForBook(searchTerm, userObject) {
+    // debugger;
     if (event.target.parentElement.querySelector("#check1").checked) {
         fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`)
         .then(response => response.json())
@@ -263,34 +307,57 @@ function showBook(book, userObject) {
     bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
     const bookPubDiv = document.createElement("div");
     bookPubDiv.classList = "book_pub"
-    bookPubDiv.innerText = book.volumeInfo.publisher;
     const bookPubDateDiv = document.createElement("div");
     bookPubDateDiv.classList = "book_date";
-    bookPubDateDiv.innerText = book.volumeInfo.publishedDate;
     const bookISBNDiv = document.createElement("div");
     bookISBNDiv.classList = "book_isbn";
-    bookISBNDiv.innerText = book.volumeInfo.industryIdentifiers[1].identifier;
     const bookCatDiv = document.createElement("div");
     bookCatDiv.classList = "book_cat";
-    bookCatDiv.innerText = book.volumeInfo.categories[0];
     const bookRatingDiv = document.createElement("div");
     bookRatingDiv.classList = "book_rating";
-    bookRatingDiv.innerText = book.volumeInfo.averageRating;
-    if (book.saleInfo.saleability === "FOR_SALE") {
-        const bookPrice = document.createElement("div");
-        bookPrice.classList = "book_price";
-        bookPrice.innerText = book.saleInfo.listPrice.amount;
-        const bookBuyLink = document.createElement("a");
-        bookBuyLink.href = book.volumeInfo.previewLink;
-        const buyLinkDiv = document.createElement("div");
-        buyLinkDiv.classList = "book_link";
-        buyLinkDiv.innerText = "Buy Now";
-        bookBuyLink.appendChild(buyLinkDiv);
-        bookDiv.append(bookPrice, bookBuyLink);
+    if ("volummeInfo" in book) {
+        bookPubDiv.innerText = book.volumeInfo.publisher;
+        bookPubDateDiv.innerText = book.volumeInfo.publishedDate;
+        bookISBNDiv.innerText = book.volumeInfo.industryIdentifiers[1].identifier;
+        bookCatDiv.innerText = book.volumeInfo.categories[0];
+        bookRatingDiv.innerText = book.volumeInfo.averageRating;
+        if (book.saleInfo.saleability === "FOR_SALE") {
+            const bookPrice = document.createElement("div");
+            bookPrice.classList = "book_price";
+            bookPrice.innerText = book.saleInfo.listPrice.amount;
+            const bookBuyLink = document.createElement("a");
+            bookBuyLink.href = book.volumeInfo.previewLink;
+            const buyLinkDiv = document.createElement("div");
+            buyLinkDiv.classList = "book_link";
+            buyLinkDiv.innerText = "Buy Now";
+            bookBuyLink.appendChild(buyLinkDiv);
+            bookDiv.append(bookPrice, bookBuyLink);
+        }
+        bookTitleDiv.innerText = book.volumeInfo.title;
+        bookDescDiv.innerText = book.volumeInfo.description;
+        bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
+    } else {
+        bookPubDiv.innerText = book.publisher;
+        bookPubDateDiv.innerText = book.published_date;
+        bookISBNDiv.innerText = book.isbn;
+        bookCatDiv.innerText = book.category;
+        bookRatingDiv.innerText = book.rating;
+        if (book.price != null) {
+            const bookPrice = document.createElement("div");
+            bookPrice.classList = "book_price";
+            bookPrice.innerText = book.price;
+            const bookBuyLink = document.createElement("a");
+            bookBuyLink.href = book.preview_link;
+            const buyLinkDiv = document.createElement("div");
+            buyLinkDiv.classList = "book_link";
+            buyLinkDiv.innerText = "Buy Now";
+            bookBuyLink.appendChild(buyLinkDiv);
+            bookDiv.append(bookPrice, bookBuyLink);
+        }
+        bookTitleDiv.innerText = book.title;
+        bookDescDiv.innerText = book.description;
+        bookImgDiv.src = book.image;
     }
-    bookTitleDiv.innerText = book.volumeInfo.title;
-    bookDescDiv.innerText = book.volumeInfo.description;
-    bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
     bookImgDiv.addEventListener("click", () => showBook(book, userObject))
     const watchlistBtn = document.createElement("button");
     watchlistBtn.classList.add("watchlist_btn");
