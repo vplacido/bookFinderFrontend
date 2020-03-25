@@ -1,4 +1,4 @@
-.card-body {
+/* .card-body {
     padding: 50px 50px 50px 50px;
     border-radius: 18px;
 }
@@ -31,7 +31,7 @@
 
 #project-header {
     margin-left: 43%;
-}
+} */
 
 /* testing card animation from youtube
 .card-body {
@@ -78,3 +78,80 @@
     transform: scale(1.15);
     box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
   } */
+
+  :root {
+    --jumbotron-padding-y: 3rem;
+  }
+  
+  .jumbotron {
+    padding-top: var(--jumbotron-padding-y);
+    padding-bottom: var(--jumbotron-padding-y);
+    margin-bottom: 0;
+    background-color: rgb(255, 255, 255);
+    background-image: url("https://c4.wallpaperflare.com/wallpaper/274/983/597/macro-paper-books-wallpaper-preview.jpg");
+    background-size: cover;
+  }
+  @media (min-width: 768px) {
+    .jumbotron {
+      padding-top: calc(var(--jumbotron-padding-y) * 2);
+      padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+    }
+  }
+  
+  .jumbotron p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .jumbotron-heading {
+    font-weight: 300;
+  }
+  
+  .jumbotron .container {
+    max-width: 40rem;
+  }
+  
+  footer {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  
+  footer p {
+    margin-bottom: .25rem;
+  }
+  
+  .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+  .btn-primary {
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 10px;
+  }
+
+  #check1, #check2 {
+      cursor: pointer;
+  }
+  #login {
+    /* margin-left: 450px; */
+    padding: 25px 25px 25px 25px 
+}
+#search {
+    /* margin-left: 450px; */
+    padding: 25px 25px 25px 25px 
+}
+
+i {
+    padding-right: 15px;
+}
+
+h1 {
+    color: #C2CAD0
+}
+::-webkit-input-placeholder {
+    text-align: center;
+ }
+
+ .col-md-4:hover {
+    transform: scale(1.15);
+    box-shadow: 5px 5px 15px rgba(9, 131, 245, 0.6);
+    cursor: pointer;
+}

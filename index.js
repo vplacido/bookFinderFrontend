@@ -23,27 +23,31 @@ document.addEventListener("DOMContentLoaded", () => {
             userObject = user;
             const watchListBtn = document.createElement("button");
             watchListBtn.innerText = "My WatchList";
-            watchListBtn.style = "margin-left: 850px;"
+            watchListBtn.style = "margin-left: 750px;"
+            watchListBtn.classList = "btn-primary";
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
-            const header = document.querySelector("#header");
+            const header = document.querySelector("#navbar-btn");//.container d-flex justify-content-between");// #header");
             const logout = document.createElement("button");
             logout.innerText = "Logout";
+            logout.classList = "btn-primary"
             logout.addEventListener("click", () => { 
                 event.preventDefault();
-                console.log("you hit line 29")
-                userObject = null;
-                const container = document.querySelector(".container");
+                userObject = {};
+                // const container = document.querySelector(".container");
                 //container.innerHTML = "";
                 const row = document.querySelector(".row");
                 row.innerHTML = ""
+                const container = row.parentElement
                 // header.innerHTML = ""
-                document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
-                document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
-
+                // document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
+                // document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
+                document.querySelector("#navbar-btn > button:nth-child(2)").parentElement.removeChild(document.querySelector("#navbar-btn > button:nth-child(2)"));
+                document.querySelector("#navbar-btn > button:nth-child(2)").parentElement.removeChild(document.querySelector("#navbar-btn > button:nth-child(2)"));
                 // debugger
                 container.appendChild(row)
                 loginPage()
             })
+            // debugger
             header.append(watchListBtn, logout);
             isfound = true;
             return user;
@@ -65,18 +69,21 @@ document.addEventListener("DOMContentLoaded", () => {
             userObject = json;
             const watchListBtn = document.createElement("button");
             watchListBtn.innerText = "My WatchList";
-            watchListBtn.style = "margin-left: 850px;";
+            watchListBtn.style = "margin-left: 750px;";
+            watchListBtn.classList = "btn-primary"
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
             const header = document.querySelector("#header");
             const logout = document.createElement("button");
             logout.innerText = "Logout";
+            logout.classList = "btn-primary"
             logout.addEventListener("click", () => { 
                 event.preventDefault()
-                console.log("you hit line 64")
-                userObject = null;
-                const container = document.querySelector(".container");
-                //container.innerHTML = "";
+                userObject = {};
+                // const container = document.querySelector(".container");
+                // //container.innerHTML = "";
+                // const row = document.querySelector(".row");
                 const row = document.querySelector(".row");
+                const container = row.parentElement
                 row.innerHTML = ""
                 // header.innerHTML = "";
                 container.appendChild(row);
@@ -94,21 +101,33 @@ document.addEventListener("DOMContentLoaded", () => {
     searchBtn.addEventListener("click", () => {
         whatUser(userObject);
         let searchTerm = document.querySelector("#search_term").value;
-        let container = document.querySelector(".container");
+        // let container = document.querySelector(".container");
         //container.innerText = "";
         const row = document.querySelector(".row");
+        const container = row.parentElement
         row.innerHTML = ""
+        container.append(row);
         searchForBook(searchTerm, userObject)
     })
 })
 
+
+//stopped working here
+
+
+
 function renderWatchlist(userObject) {
     let bookIdArray = []
     let watchlistIdArray = []
-    const container = document.querySelector(".container");
+    const mainDiv = document.querySelector(".album");
+    // debugger;
+    const container = document.querySelector(".album > .container");
+    // debugger
+    let row = document.querySelector(".album > .container > .row");
+    // const container = document.querySelector(".container");
     // container.dataset.id = userObject.id
     //container.innerHTML = "";
-    const row = document.querySelector(".row");
+    // const row = document.querySelector(".row");
     row.innerHTML = ""
     fetch("http://localhost:3000/watchlists")
     .then(response => response.json())
@@ -124,40 +143,59 @@ function renderWatchlist(userObject) {
     .then(response => response.json())
     .then(json => json.forEach(b => {
         if (bookIdArray.includes(b.id)) {
-            // const container = document.querySelector("#container");
-            // container.innerHTML = "";
+
             const bookDiv = document.createElement("div");
-            bookDiv.classList.add("card-body");//book")
+            bookDiv.classList = "col-md-4";//.add("card-body");//book")
             bookDiv.dataset.id = userObject.id;
-            bookDiv.style = "width: 21em;"
-            const bookTitleDiv = document.createElement("div");
-            bookTitleDiv.classList.add("card-text")//book_title");
-            bookTitleDiv.style = "text-align: center; font-weight: bold;"
-            const bookDescDiv = document.createElement("div");
-            bookDescDiv.classList.add("card-text")//book_desc");
-            bookDescDiv.style = "text-align: center;"
-            const newImgDiv = document.createElement("div");
-            newImgDiv.classList = "card-image";
-            const bookImgDiv = document.createElement("img");
+            // bookDiv.style = "width: 21em;"
+            const lastBookDiv = document.createElement("div");
+            lastBookDiv.classList = "card md-4 box-shadow"
+            const bookImg = document.createElement("img");
+            bookImg.classList = "card-img-top"
+            bookImg.alt = "Card image cap"
+            const cardBodyDiv = document.createElement("div");
+            cardBodyDiv.classList = "card-body";    
+            const bookTitle = document.createElement("h4");
+            bookTitle.classList.add("card-text")//book_title");
+            // bookTitleDiv.style = "text-align: center; font-weight: bold;"
+            const bookDesc = document.createElement("p");
+            bookDesc.classList.add("card-text")//book_desc");
+            // bookDescDiv.style = "text-align: center;"
+            // const newImgDiv = document.createElement("div");
+            // newImgDiv.classList = "card-image";
+            // const bookImgDiv = document.createElement("img");
+            const outterBtnDiv = document.createElement("div");
+            outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
+            const innerBtnDiv = document.createElement("div");
+            innerBtnDiv.classList = "btn-group"
             const watchlistDeleteBtn = document.createElement("button");
             watchlistDeleteBtn.innerText = "Delete";
             watchlistDeleteBtn.addEventListener("click", () => deleteWatchlist(userObject, b, watchlistIdArray[bookIdArray.indexOf(b.id)]));
-            bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
-            bookTitleDiv.innerText = b.title;
+            // bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
+            bookTitle.innerText = b.title;
             // bookDescDiv.innerText = b.description;
             if (!!b.snippet) {
-                bookDescDiv.innerText = b.snippet
+                bookDesc.innerText = b.snippet
             }else {
-                bookDescDiv.innerText = b.description;
+                bookDesc.innerText = b.description;
             }
-            bookImgDiv.src = b.image;
+            bookImg.src = b.image;
             // debugger;
-            bookImgDiv.addEventListener("click", () => showBook(b, userObject))
-            newImgDiv.appendChild(bookImgDiv);
-            // newImgDiv.style = `background: url(${bookImgDiv.src});`
-            bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistDeleteBtn);
+            bookImg.addEventListener("click", () => showBook(b, userObject))
+
+            innerBtnDiv.append(watchlistDeleteBtn);
+            outterBtnDiv.append(innerBtnDiv);
+            cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv);
+            lastBookDiv.append(bookImg, cardBodyDiv);
+            bookDiv.append(lastBookDiv);
             row.appendChild(bookDiv);
-            container.appendChild(row)//bookDiv);
+            container.appendChild(row);
+            mainDiv.appendChild(container)
+            // newImgD.appendChild(bookImgDiv);
+            // // newImgDiv.style = `background: url(${bookImgDiv.src});`
+            // bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistDeleteBtn);
+            // row.appendChild(bookDiv);
+            // container.appendChild(row)//bookDiv);
         }
     }))
 
@@ -189,6 +227,7 @@ function loginPage() {
     input.placeholder = "username";
     input.required = true;
     submit.type = "submit";
+    submit.classList = "btn-primary"
     form.append(input, submit);
     div.append(h1, form);
 }
@@ -200,42 +239,63 @@ function fetchBooks() {
 }
 
 function renderBook(book, userObject) {
-    const container = document.querySelector(".container");
-    const row = document.querySelector(".row");
-    const bookDiv = document.createElement("div");
-    bookDiv.classList.add("card-body");//book")
-    bookDiv.style = "width: 21em;"
-    const bookTitleDiv = document.createElement("div");
-    bookTitleDiv.classList.add("card-text")//book_title");
-    bookTitleDiv.style = "text-align: center; font-weight: bold;"
-    const bookDescDiv = document.createElement("div");
-    bookDescDiv.classList.add("card-text")//book_desc");
-    bookDescDiv.style = "text-align: center;"
-    const newImgDiv = document.createElement("div");
-    newImgDiv.classList = "card-image";
-    const bookImgDiv = document.createElement("img");
-    bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
-    bookTitleDiv.innerText = book.volumeInfo.title;
+    const mainDiv = document.querySelector(".album");
     // debugger;
+    const container = document.querySelector(".album > .container");
+    // debugger
+    let row = document.querySelector(".album > .container > .row");
+    const bookDiv = document.createElement("div");
+    bookDiv.classList = "col-md-4";//.add("card-body");//book")
+    //bookDiv.style = "width: 21em;"
+    const lastBookDiv = document.createElement("div");
+    lastBookDiv.classList = "card md-4 box-shadow"
+    // const newImgDiv = document.createElement("div");
+    // newImgDiv.classList = "card-image";
+    const bookImg = document.createElement("img");
+    bookImg.classList = "card-img-top";// ("bd-placeholder-img card-img-top");//book_img");
+    bookImg.alt = "Card image cap"
+    const cardBodyDiv = document.createElement("div");
+    cardBodyDiv.classList = "card-body";
+    const bookTitle = document.createElement("h4");
+    bookTitle.classList.add("card-text")//book_title");
+    // bookTitleDiv.style = "text-align: center; font-weight: bold;"
+    bookTitle.innerText = book.volumeInfo.title;
+    const bookDesc = document.createElement("p");
+    bookDesc.classList.add("card-text")//book_desc");
+    // bookDescDiv.style = "text-align: center;"
+
     if ("searchInfo" in book) {
-        bookDescDiv.innerText = book.searchInfo.textSnippet
+        bookDesc.innerText = book.searchInfo.textSnippet
     }else {
-        bookDescDiv.innerText = book.volumeInfo.description;
+        bookDesc.innerText = book.volumeInfo.description;
     }
-    bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
-    bookImgDiv.addEventListener("click", () => showBook(book, userObject))
+    bookImg.src = book.volumeInfo.imageLinks.smallThumbnail;
+    bookImg.addEventListener("click", () => showBook(book, userObject))
+    const outterBtnDiv = document.createElement("div");
+    outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
+    const innerBtnDiv = document.createElement("div");
+    innerBtnDiv.classList = "btn-group";
     const watchlistBtn = document.createElement("button");
-    watchlistBtn.classList.add("watchlist_btn");
+    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
     watchlistBtn.dataset.id = userObject.id;
     watchlistBtn.innerText = "Add to watchlist";
     watchlistBtn.addEventListener("click", () => {
         createBook(book, userObject)
     });
-    newImgDiv.appendChild(bookImgDiv);
+    innerBtnDiv.append(watchlistBtn);
+    outterBtnDiv.append(innerBtnDiv);
+    cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv)
+    //newImgDiv.appendChild(bookImgDiv);
     // newImgDiv.style = `background: url(${bookImgDiv.src});`
-    bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistBtn);
+    lastBookDiv.append(bookImg, cardBodyDiv)
+    bookDiv.append(lastBookDiv);
+    // debugger
     row.appendChild(bookDiv);
-    container.appendChild(row)//bookDiv);
+    container.appendChild(row);
+    mainDiv.appendChild(container);
+    // bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistBtn);
+    // row.appendChild(bookDiv);
+    // container.appendChild(row)//bookDiv);
 }
 
 function createBook(book, userObject) {

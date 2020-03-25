@@ -1,29 +1,34 @@
 <!DOCTYPE html>
 <html lang=“en”>
 <head>
-  <meta charset=“UTF-8">
-  <meta name=“viewport” content=“width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=“UTF-8">
+  <meta name=“viewport” content=“width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta http-equiv=“X-UA-Compatible” content=“ie=edge”>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- bootstrap css -->
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
+  <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css"><!--https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+  <!-- <link href="Users/User/Documents/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet">  -->
+  <link href="/Users/User/Documents/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet">
+  <!-- custom css -->
   <link rel="stylesheet" href="style.css">
-  <title>Document</title>
+  <!-- <title>Document</title> -->
 </head>
 <body>
+  <!-- original css
   <div class="navbar navbar-dark bg-dark shadow-sm"id="header">
       <h1>Book App</h1>
   </div>
   <div id="login"></div>
   <div id="search">
-    <!-- Search Bar -->
-    <!-- <form id="search-form">  -->
+    <!-- <form id="search-form">  
       <input type="text" id="search_term" placeholder="search for book" required>
       <input type="radio" id="check1" name="title" value="title" onclick="selectOnlyThis(this.id)" checked> 
       <label for="title">Title</label>
       <input type="radio" id="check2" name="genre" value="genre" onclick="selectOnlyThis(this.id)">
       <label for="genre">Genre</label>
       <button id="search_btn">Search</button>
-      <!-- <input type="submit"> -->
-  <!-- </form> -->
+      <!-- <input type="submit"> 
+  <!-- </form> 
   </div>
   <div class="container">
     <div class="row">
@@ -31,6 +36,146 @@
     </div>
 
   </div>
+-->
+
+
+<header>
+  <div class="collapse bg-dark" id="navbarHeader">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-8 col-md-7 py-4">
+          <h4 class="text-white">About</h4>
+          <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+        </div>
+        <div class="col-sm-4 offset-md-1 py-4">
+          <h4 class="text-white">Contact</h4>
+          <ul class="list-unstyled">
+            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+            <li><a href="#" class="text-white">Like on Facebook</a></li>
+            <li><a href="#" class="text-white">Email me</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="navbar navbar-dark bg-dark box-shadow">
+    <div class="container d-flex justify-content-between" id="navbar-btn">
+      <a href="#" class="navbar-brand d-flex align-items-center">
+        <i class="fas fa-bible"></i>
+        <strong>Book App</strong>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main role="main">
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <!-- <div id="header">
+        <h1>Book App</h1>
+      </div> -->
+      <div id="login"></div>
+        <div id="search">
+          <div> 
+            <input type="text" id="search_term" placeholder="search for book" required>
+            <input type="radio" id="check1" name="title" value="title" onclick="selectOnlyThis(this.id)" checked> 
+            <label for="title">Title</label>
+            <input type="radio" id="check2" name="genre" value="genre" onclick="selectOnlyThis(this.id)">
+            <label for="genre">Genre</label>
+            <button id="search_btn" class="btn-primary">Search</button>
+        </div>
+      <!-- </p> -->
+    </div>
+  </section>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="row">
+        <!-- <div class="col-md-4">
+          <div class="card mb-4 box-shadow">
+            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">9 mins</small>
+              </div>
+            </div>
+          </div>
+        </div> 
+      
+      const bookDiv = document.createElement("div");
+    bookDiv.classList = "col-md-4";//.add("card-body");//book")
+    //bookDiv.style = "width: 21em;"
+    const lastBookDiv = document.createElement("div");
+    lastBookDiv.classList = "card md-4 box-shadow"
+    // const newImgDiv = document.createElement("div");
+    // newImgDiv.classList = "card-image";
+    const bookImg = document.createElement("img");
+    bookImg.classList = "card-img-top";// ("bd-placeholder-img card-img-top");//book_img");
+    bookImg.alt = "Card image cap"
+    const cardBodyDiv = document.createElement("div");
+    cardBodyDiv.classList = "card-body";
+    const bookTitle = document.createElement("h4");
+    bookTitle.classList.add("card-text")//book_title");
+    // bookTitleDiv.style = "text-align: center; font-weight: bold;"
+    bookTitle.innerText = book.volumeInfo.title;
+    const bookDesc = document.createElement("p");
+    bookDesc.classList.add("card-text")//book_desc");
+    // bookDescDiv.style = "text-align: center;"
+
+    if ("searchInfo" in book) {
+        bookDesc.innerText = book.searchInfo.textSnippet
+    }else {
+        bookDesc.innerText = book.volumeInfo.description;
+    }
+    bookImg.src = book.volumeInfo.imageLinks.smallThumbnail;
+    bookImg.addEventListener("click", () => showBook(book, userObject))
+    const outterBtnDiv = document.createElement("div");
+    outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
+    const innerBtnDiv = document.createElement("div");
+    innerBtnDiv.classList = "btn-group";
+    const watchlistBtn = document.createElement("button");
+    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
+    watchlistBtn.dataset.id = userObject.id;
+    watchlistBtn.innerText = "Add to watchlist";
+    watchlistBtn.addEventListener("click", () => {
+        createBook(book, userObject)
+    });
+    innerBtnDiv.append(watchlistBtn);
+    outterBtnDiv.append(innerBtnDiv);
+    cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv)
+    //newImgDiv.appendChild(bookImgDiv);
+    // newImgDiv.style = `background: url(${bookImgDiv.src});`
+    lastBookDiv.append(bookImg, cardBodyDiv)
+    bookDiv.append(lastBookDiv);
+    // debugger
+    row.appendChild(bookDiv);
+    container.appendChild(row);
+    mainDiv.appendChild(container);-->
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="text-muted">
+  <div class="container">
+    <p class="float-right">
+      <a href="#">Back to top</a>
+    </p>
+    <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
+    <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p>
+  </div>
+</footer>
+
+  <!-- added -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="index.js"></script>
 </body>
 </html>
