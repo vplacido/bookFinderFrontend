@@ -1,13 +1,16 @@
 //super strech function: find a way to logout the user from the application without reloading the page
 
 //fix width of row with only one book
+//fix the logout page when a user logs out and attempts to login again the page reloads, fix the issue
 
 document.addEventListener("DOMContentLoaded", () => {
     loginPage()
-    const form = document.querySelector("form");
+    const form = document.querySelector(".login_form");
     let userObject = {} 
     form.addEventListener("submit", (event) => {
+        // debugger
         event.preventDefault()
+        console.log("form was hit")
         const username = event.currentTarget.querySelector("input").value
         fetch("http://localhost:3000/users").then(response => response.json())
             .then(json => { 
@@ -26,12 +29,19 @@ document.addEventListener("DOMContentLoaded", () => {
             const logout = document.createElement("button");
             logout.innerText = "Logout";
             logout.addEventListener("click", () => { 
+                event.preventDefault();
+                console.log("you hit line 29")
                 userObject = null;
                 const container = document.querySelector(".container");
                 //container.innerHTML = "";
                 const row = document.querySelector(".row");
                 row.innerHTML = ""
-                header.innerHTML = ""
+                // header.innerHTML = ""
+                document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
+                document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
+
+                // debugger
+                container.appendChild(row)
                 loginPage()
             })
             header.append(watchListBtn, logout);
@@ -39,7 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
             return user;
         } 
     })
-        if (!isfound) {
+        if (!isfound) { 
+            event.preventDefault()
             fetch("http://localhost:3000/users", {
             method: "POST",
             headers: {
@@ -60,12 +71,15 @@ document.addEventListener("DOMContentLoaded", () => {
             const logout = document.createElement("button");
             logout.innerText = "Logout";
             logout.addEventListener("click", () => { 
+                event.preventDefault()
+                console.log("you hit line 64")
                 userObject = null;
                 const container = document.querySelector(".container");
                 //container.innerHTML = "";
                 const row = document.querySelector(".row");
                 row.innerHTML = ""
-                header.innerHTML = "";
+                // header.innerHTML = "";
+                container.appendChild(row);
                 loginPage()
             })
             header.append(watchListBtn, logout);
@@ -75,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
     })
+    event.preventDefault()
     const searchBtn = document.querySelector("#search_btn");
     searchBtn.addEventListener("click", () => {
         whatUser(userObject);
