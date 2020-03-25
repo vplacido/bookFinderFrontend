@@ -136,7 +136,7 @@ function renderWatchlist(userObject) {
                 bookDescDiv.innerText = b.description;
             }
             bookImgDiv.src = b.image;
-            debugger;
+            // debugger;
             bookImgDiv.addEventListener("click", () => showBook(b, userObject))
             newImgDiv.appendChild(bookImgDiv);
             // newImgDiv.style = `background: url(${bookImgDiv.src});`
@@ -315,7 +315,7 @@ function showBook(book, userObject) {
     bookCatDiv.classList = "book_cat";
     const bookRatingDiv = document.createElement("div");
     bookRatingDiv.classList = "book_rating";
-    if ("volummeInfo" in book) {
+    if ("volumeInfo" in book) {
         bookPubDiv.innerText = book.volumeInfo.publisher;
         bookPubDateDiv.innerText = book.volumeInfo.publishedDate;
         bookISBNDiv.innerText = book.volumeInfo.industryIdentifiers[1].identifier;
@@ -356,6 +356,7 @@ function showBook(book, userObject) {
         }
         bookTitleDiv.innerText = book.title;
         bookDescDiv.innerText = book.description;
+        // debugger
         bookImgDiv.src = book.image;
     }
     bookImgDiv.addEventListener("click", () => showBook(book, userObject))
