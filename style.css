@@ -233,3 +233,36 @@ footer.text-muted{
   font-family: 'Lobster', cursive;
   text-align: center;
 }
+
+h1, .credit, strong {
+  -webkit-animation:name 2s infinite;
+}
+@-webkit-keyframes name {
+  0% {color: red;}
+  25%{color:yellow;}
+  50%{color:green;}
+  75%{color:brown;}
+  100% {color: red;}
+}
+.btn-outline-secondary{
+  transition: 3s;
+}
+
+.btn-outline-secondary:hover {
+  background-color: gold;
+}
+
+.fas {
+  animation: updown 2s ease infinite;
+}
+@keyframes updown {
+0% {
+  transform: translateY(-100%);
+}
+50% {
+  transform: translateY(100%);
+}
+100% {
+  transform: translateY(-100%);
+}
+}
