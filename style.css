@@ -228,3 +228,8 @@ footer.text-muted{
 #delete {
     margin-left: 120px !important;
 }
+
+.credit {
+  font-family: 'Lobster', cursive;
+  text-align: center;
+}
