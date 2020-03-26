@@ -99,15 +99,30 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault()
     const searchBtn = document.querySelector("#search_btn");
     searchBtn.addEventListener("click", () => {
+        event.preventDefault();
         whatUser(userObject);
+        // debugger
         let searchTerm = document.querySelector("#search_term").value;
         // let container = document.querySelector(".container");
         //container.innerText = "";
-        const row = document.querySelector(".row");
-        const container = row.parentElement
+        // const row = document.querySelector(".row");
+        const main = document.querySelector(".album");
+        const container = document.querySelector(".album > .container");
+        let row = document.querySelector(".album > .container > .row");
         row.innerHTML = ""
         container.append(row);
+        main.append(container)
         searchForBook(searchTerm, userObject)
+        searchTerm.value = "";
+    })
+    const homeIcon = document.querySelector("#navbar");
+    homeIcon.addEventListener("click", () => {
+        const main = document.querySelector(".album");
+        const container = document.querySelector(".album > .container");
+        let row = document.querySelector(".album > .container > .row");
+        row.innerHTML = ""
+        container.append(row);
+        main.append(container)
     })
 })
 
@@ -170,6 +185,7 @@ function renderWatchlist(userObject) {
             innerBtnDiv.classList = "btn-group"
             const watchlistDeleteBtn = document.createElement("button");
             watchlistDeleteBtn.innerText = "Delete";
+            watchlistDeleteBtn.id = "delete";
             watchlistDeleteBtn.addEventListener("click", () => deleteWatchlist(userObject, b, watchlistIdArray[bookIdArray.indexOf(b.id)]));
             // bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
             bookTitle.innerText = b.title;
@@ -209,7 +225,9 @@ function deleteWatchlist(userObject, book, watchlistId) {
     fetch(`http://localhost:3000/watchlists/${watchlistId}`, {
         method: "DELETE"
     })
-    event.target.parentElement.remove()
+    // debugger
+    event.currentTarget.parentElement.parentElement.parentElement.parentElement.parentElement.remove()
+    // event.target.parentElement.remove()
 }
 
 function whatUser(userObject){
@@ -323,7 +341,7 @@ function createBook(book, userObject) {
             description: book.volumeInfo.description,
             image: book.volumeInfo.imageLinks.smallThumbnail,
             snippet: null,
-            snippet: book.searchInfo.textSnippet,
+            // snippet: book.searchInfo.textSnippet,
             publisher: book.volumeInfo.publisher,
             published_date: book.volumeInfo.publishedDate,
             isbn: null,
@@ -365,84 +383,109 @@ function selectOnlyThis(id) {
 }
 
 function showBook(book, userObject) {
-    let container = document.querySelector(".container");
-    // container.innerHTML = "";
-    let row = document.querySelector(".row");
-    row.innerHTML = ""
+    const mainDiv = document.querySelector(".album");
+    // debugger;
+    const container = document.querySelector(".album > .container");
+    // debugger
+    let row = document.querySelector(".album > .container > .row");
     const bookDiv = document.createElement("div");
-    bookDiv.classList.add("card-body");//book")
-    bookDiv.style = "width: 21em;"
-    const bookTitleDiv = document.createElement("div");
-    bookTitleDiv.classList.add("book_title");
-    bookTitleDiv.style = "text-align: center; font-weight: bold;"
-    const bookDescDiv = document.createElement("div");
-    bookDescDiv.classList.add("book_desc");
-    bookDescDiv.style = "text-align: center;"
-    const bookImgDiv = document.createElement("img");
-    bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
-    const bookPubDiv = document.createElement("div");
-    bookPubDiv.classList = "book_pub"
-    const bookPubDateDiv = document.createElement("div");
-    bookPubDateDiv.classList = "book_date";
-    const bookISBNDiv = document.createElement("div");
-    bookISBNDiv.classList = "book_isbn";
-    const bookCatDiv = document.createElement("div");
-    bookCatDiv.classList = "book_cat";
-    const bookRatingDiv = document.createElement("div");
-    bookRatingDiv.classList = "book_rating";
+    //let container = document.querySelector(".container");
+    // container.innerHTML = "";
+    //let row = document.querySelector(".row");
+    row.innerHTML = ""
+    //const bookDiv = document.createElement("div");
+    bookDiv.classList = "col-md-4"//.add("card-body");//book")
+    // bookDiv.style = "width: 21em;"
+    const lastBookDiv = document.createElement("div");
+    lastBookDiv.classList = "card md-4 box-shadow";
+    const cardBodyDiv = document.createElement("div");
+    cardBodyDiv.classList = "card-body";
+    const bookTitle = document.createElement("h2");
+    bookTitle.classList.add("card-text");//book_title");
+    // bookTitle.style = "text-align: center; font-weight: bold;"
+    const bookDesc = document.createElement("p");
+    bookDesc.classList.add("card-text");//book_desc");
+    // bookDesc.style = "text-align: center;"
+    const bookImg = document.createElement("img");
+    bookImg.classList = ("card-img-top");//bd-placeholder-img card-img-top");//book_img");
+    const bookPub = document.createElement("p");
+    bookPub.classList = "card-text";//book_pub"
+    const bookPubDate = document.createElement("p");
+    bookPubDate.classList = "card-text";//book_date";
+    const bookISBN = document.createElement("p");
+    bookISBN.classList = "card-text";//book_isbn";
+    const bookCat = document.createElement("p");
+    bookCat.classList = "card-text";//book_cat";
+    const bookRating = document.createElement("p");
+    bookRating.classList = "card-text";//book_rating";
     if ("volumeInfo" in book) {
-        bookPubDiv.innerText = book.volumeInfo.publisher;
-        bookPubDateDiv.innerText = book.volumeInfo.publishedDate;
-        bookISBNDiv.innerText = book.volumeInfo.industryIdentifiers[1].identifier;
-        bookCatDiv.innerText = book.volumeInfo.categories[0];
-        bookRatingDiv.innerText = book.volumeInfo.averageRating;
+        bookPub.innerText = `Publisher: ${book.volumeInfo.publisher}`;
+        bookPubDate.innerText = `Publised on: ${book.volumeInfo.publishedDate}`;
+        bookISBN.innerText = `ISBN: ${book.volumeInfo.industryIdentifiers[1].identifier}`;
+        bookCat.innerText = `Category: ${book.volumeInfo.categories[0]}`;
+        bookRating.innerText = `Rating: ${book.volumeInfo.averageRating}`;
         if (book.saleInfo.saleability === "FOR_SALE") {
-            const bookPrice = document.createElement("div");
-            bookPrice.classList = "book_price";
-            bookPrice.innerText = book.saleInfo.listPrice.amount;
+            const bookPrice = document.createElement("p");
+            bookPrice.classList = "card-text";//book_price";
+            bookPrice.innerText = `Price: $${book.saleInfo.listPrice.amount}`;
             const bookBuyLink = document.createElement("a");
             bookBuyLink.href = book.volumeInfo.previewLink;
-            const buyLinkDiv = document.createElement("div");
-            buyLinkDiv.classList = "book_link";
-            buyLinkDiv.innerText = "Buy Now";
-            bookBuyLink.appendChild(buyLinkDiv);
+            const buyLink = document.createElement("p");
+            buyLink.classList = "card-text";//book_link";
+            buyLink.innerText = "Buy Now";
+            bookBuyLink.appendChild(buyLink);
             bookDiv.append(bookPrice, bookBuyLink);
         }
-        bookTitleDiv.innerText = book.volumeInfo.title;
-        bookDescDiv.innerText = book.volumeInfo.description;
-        bookImgDiv.src = book.volumeInfo.imageLinks.smallThumbnail;
+        bookTitle.innerText = book.volumeInfo.title;
+        bookDesc.innerText = book.volumeInfo.description;
+        bookImg.src = book.volumeInfo.imageLinks.smallThumbnail;
     } else {
-        bookPubDiv.innerText = book.publisher;
-        bookPubDateDiv.innerText = book.published_date;
-        bookISBNDiv.innerText = book.isbn;
-        bookCatDiv.innerText = book.category;
-        bookRatingDiv.innerText = book.rating;
+        bookPub.innerText = `Publisher: ${book.publisher}`;
+        bookPubDate.innerText = `Published on: ${book.published_date}`;
+        bookISBN.innerText = `ISBN: ${book.isbn}`;
+        bookCat.innerText = `Category: ${book.category}`;
+        bookRating.innerText = `Rating: ${book.rating}`;
         if (book.price != null) {
-            const bookPrice = document.createElement("div");
-            bookPrice.classList = "book_price";
-            bookPrice.innerText = book.price;
+            const bookPrice = document.createElement("p");
+            bookPrice.classList = "card-text";//book_price";
+            bookPrice.innerText = `Price: ${book.price}`;
             const bookBuyLink = document.createElement("a");
             bookBuyLink.href = book.preview_link;
-            const buyLinkDiv = document.createElement("div");
-            buyLinkDiv.classList = "book_link";
-            buyLinkDiv.innerText = "Buy Now";
-            bookBuyLink.appendChild(buyLinkDiv);
+            const buyLink = document.createElement("p");
+            buyLink.classList = "card-text";//book_link";
+            buyLink.innerText = "Buy Now";
+            bookBuyLink.appendChild(buyLink);
             bookDiv.append(bookPrice, bookBuyLink);
         }
-        bookTitleDiv.innerText = book.title;
-        bookDescDiv.innerText = book.description;
+        bookTitle.innerText = book.title;
+        bookDesc.innerText = book.description;
         // debugger
-        bookImgDiv.src = book.image;
+        bookImg.src = book.image;
     }
-    bookImgDiv.addEventListener("click", () => showBook(book, userObject))
+    bookImg.addEventListener("click", () => showBook(book, userObject))
+    const outterBtnDiv = document.createElement("div");
+    outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
+    const innerBtnDiv = document.createElement("div");
+    innerBtnDiv.classList = "btn-group";
     const watchlistBtn = document.createElement("button");
-    watchlistBtn.classList.add("watchlist_btn");
+    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
     watchlistBtn.dataset.id = userObject.id;
     watchlistBtn.innerText = "Add to watchlist";
     watchlistBtn.addEventListener("click", () => {
         createBook(book, userObject)
     });
-    bookDiv.append(bookImgDiv, bookTitleDiv, bookDescDiv, bookPubDiv, bookPubDateDiv, bookISBNDiv, bookCatDiv, bookRatingDiv, watchlistBtn);
-    row.appendChild(bookDiv)
-    container.appendChild(row);//bookDiv);
+    innerBtnDiv.append(watchlistBtn);
+    outterBtnDiv.append(innerBtnDiv);
+    cardBodyDiv.append(bookTitle, bookDesc, bookPub, bookPubDate, bookISBN, bookCat, bookRating, outterBtnDiv)
+    lastBookDiv.append(bookImg, cardBodyDiv)
+    bookDiv.append(lastBookDiv);
+    row.appendChild(bookDiv);
+    container.appendChild(row);
+    mainDiv.appendChild(container)
+
+    // bookDiv.append(bookImgDiv, bookTitleDiv, bookDescDiv, bookPubDiv, bookPubDateDiv, bookISBNDiv, bookCatDiv, bookRatingDiv, watchlistBtn);
+    // row.appendChild(bookDiv)
+    // container.appendChild(row);//bookDiv);
 }
+
+///fix showBook
