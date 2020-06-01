@@ -4,42 +4,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=“UTF-8">
   <meta name=“viewport” content=“width=device-width, initial-scale=1.0, shrink-to-fit=no">
   <meta http-equiv=“X-UA-Compatible” content=“ie=edge”>
-  <!-- bootstrap css -->
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
-  <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css"><!--https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
-  <!-- <link href="Users/User/Documents/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet">  -->
+  <link rel="stylesheet" href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css">
   <link href="/Users/User/Documents/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet">
-  <!-- custom css -->
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css?family=Lobster&display=swap" rel="stylesheet">
-  <!-- <title>Document</title> -->
 </head>
 <body>
-  <!-- original css
-  <div class="navbar navbar-dark bg-dark shadow-sm"id="header">
-      <h1>Book App</h1>
-  </div>
-  <div id="login"></div>
-  <div id="search">
-    <!-- <form id="search-form">  
-      <input type="text" id="search_term" placeholder="search for book" required>
-      <input type="radio" id="check1" name="title" value="title" onclick="selectOnlyThis(this.id)" checked> 
-      <label for="title">Title</label>
-      <input type="radio" id="check2" name="genre" value="genre" onclick="selectOnlyThis(this.id)">
-      <label for="genre">Genre</label>
-      <button id="search_btn">Search</button>
-      <!-- <input type="submit"> 
-  <!-- </form> 
-  </div>
-  <div class="container">
-    <div class="row">
-
-    </div>
-
-  </div>
--->
-
-
 <header>
   <div class="collapse bg-dark" id="navbarHeader">
     <div class="container">
@@ -62,7 +32,7 @@
   <div class="navbar navbar-dark bg-dark box-shadow">
     <div class="container d-flex justify-content-between" id="navbar-btn">
       <a href="#" class="navbar-brand d-flex align-items-center" id="navbar">
-        <i class="fas fa-bible"></i>
+        <i class="fas fa-bible" id="bible"></i>
         <strong>Book App</strong>
       </a>
     </div>
@@ -73,9 +43,6 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <!-- <div id="header">
-        <h1>Book App</h1>
-      </div> -->
       <div id="login"></div>
         <div id="search">
           <div> 
@@ -87,7 +54,6 @@
             <label for="genre">Genre</label>
             <button id="search_btn" class="btn-primary">Search</button>
         </div>
-      <!-- </p> -->
     </div>
   </section>
 
@@ -95,71 +61,6 @@
     <div class="container">
 
       <div class="row">
-        <!-- <div class="col-md-4">
-          <div class="card mb-4 box-shadow">
-            <img class="card-img-top" data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Thumbnail" alt="Card image cap">
-            <div class="card-body">
-              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                </div>
-                <small class="text-muted">9 mins</small>
-              </div>
-            </div>
-          </div>
-        </div> 
-      
-      const bookDiv = document.createElement("div");
-    bookDiv.classList = "col-md-4";//.add("card-body");//book")
-    //bookDiv.style = "width: 21em;"
-    const lastBookDiv = document.createElement("div");
-    lastBookDiv.classList = "card md-4 box-shadow"
-    // const newImgDiv = document.createElement("div");
-    // newImgDiv.classList = "card-image";
-    const bookImg = document.createElement("img");
-    bookImg.classList = "card-img-top";// ("bd-placeholder-img card-img-top");//book_img");
-    bookImg.alt = "Card image cap"
-    const cardBodyDiv = document.createElement("div");
-    cardBodyDiv.classList = "card-body";
-    const bookTitle = document.createElement("h4");
-    bookTitle.classList.add("card-text")//book_title");
-    // bookTitleDiv.style = "text-align: center; font-weight: bold;"
-    bookTitle.innerText = book.volumeInfo.title;
-    const bookDesc = document.createElement("p");
-    bookDesc.classList.add("card-text")//book_desc");
-    // bookDescDiv.style = "text-align: center;"
-
-    if ("searchInfo" in book) {
-        bookDesc.innerText = book.searchInfo.textSnippet
-    }else {
-        bookDesc.innerText = book.volumeInfo.description;
-    }
-    bookImg.src = book.volumeInfo.imageLinks.smallThumbnail;
-    bookImg.addEventListener("click", () => showBook(book, userObject))
-    const outterBtnDiv = document.createElement("div");
-    outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
-    const innerBtnDiv = document.createElement("div");
-    innerBtnDiv.classList = "btn-group";
-    const watchlistBtn = document.createElement("button");
-    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
-    watchlistBtn.dataset.id = userObject.id;
-    watchlistBtn.innerText = "Add to watchlist";
-    watchlistBtn.addEventListener("click", () => {
-        createBook(book, userObject)
-    });
-    innerBtnDiv.append(watchlistBtn);
-    outterBtnDiv.append(innerBtnDiv);
-    cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv)
-    //newImgDiv.appendChild(bookImgDiv);
-    // newImgDiv.style = `background: url(${bookImgDiv.src});`
-    lastBookDiv.append(bookImg, cardBodyDiv)
-    bookDiv.append(lastBookDiv);
-    // debugger
-    row.appendChild(bookDiv);
-    container.appendChild(row);
-    mainDiv.appendChild(container);-->
       </div>
     </div>
   </div>
@@ -172,11 +73,8 @@
       <a href="#"><i class="fas fa-arrow-alt-circle-up"style="font-size: 3em;"></i></a>
     </p>
     <p class="credit  ">Created By Valentin and Jason!</p>
-    <!-- <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting started guide</a>.</p> -->
   </div>
 </footer>
-
-  <!-- added -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
   <script src="index.js"></script>
 </body>

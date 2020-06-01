@@ -1,16 +1,10 @@
-//super strech function: find a way to logout the user from the application without reloading the page
-
-//fix width of row with only one book
-//fix the logout page when a user logs out and attempts to login again the page reloads, fix the issue
-
 document.addEventListener("DOMContentLoaded", () => {
     loginPage()
     const form = document.querySelector(".login_form");
     let userObject = {} 
     form.addEventListener("submit", (event) => {
-        // debugger
         event.preventDefault()
-        console.log("form was hit")
+        // console.log("form was hit")
         const username = event.currentTarget.querySelector("input").value
         fetch("http://localhost:3000/users").then(response => response.json())
             .then(json => { 
@@ -18,7 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
         json.forEach(user => {
         if  (username == user.username) {
             const div = document.querySelector("#login");
-            // div.parentNode.removeChild(div);
             div.innerHTML = ""
             userObject = user;
             const watchListBtn = document.createElement("button");
@@ -26,28 +19,21 @@ document.addEventListener("DOMContentLoaded", () => {
             watchListBtn.style = "margin-left: 750px;"
             watchListBtn.classList = "btn-primary";
             watchListBtn.addEventListener("click", () => renderWatchlist(userObject));
-            const header = document.querySelector("#navbar-btn");//.container d-flex justify-content-between");// #header");
+            const header = document.querySelector("#navbar-btn");
             const logout = document.createElement("button");
             logout.innerText = "Logout";
             logout.classList = "btn-primary"
             logout.addEventListener("click", () => { 
                 event.preventDefault();
                 userObject = {};
-                // const container = document.querySelector(".container");
-                //container.innerHTML = "";
                 const row = document.querySelector(".row");
                 row.innerHTML = ""
                 const container = row.parentElement
-                // header.innerHTML = ""
-                // document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
-                // document.querySelector("#header > button").parentElement.removeChild(document.querySelector("#header > button"))
                 document.querySelector("#navbar-btn > button:nth-child(2)").parentElement.removeChild(document.querySelector("#navbar-btn > button:nth-child(2)"));
                 document.querySelector("#navbar-btn > button:nth-child(2)").parentElement.removeChild(document.querySelector("#navbar-btn > button:nth-child(2)"));
-                // debugger
                 container.appendChild(row)
                 loginPage()
             })
-            // debugger
             header.append(watchListBtn, logout);
             isfound = true;
             return user;
@@ -63,8 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify({username: username})
         }).then(response => response.json()).then(json => {
             const div = document.querySelector("#login");
-            // debugger
-            // div.parentNode.removeChild(div);
             div.innerHTML = "";
             userObject = json;
             const watchListBtn = document.createElement("button");
@@ -79,13 +63,9 @@ document.addEventListener("DOMContentLoaded", () => {
             logout.addEventListener("click", () => { 
                 event.preventDefault()
                 userObject = {};
-                // const container = document.querySelector(".container");
-                // //container.innerHTML = "";
-                // const row = document.querySelector(".row");
                 const row = document.querySelector(".row");
                 const container = row.parentElement
                 row.innerHTML = ""
-                // header.innerHTML = "";
                 container.appendChild(row);
                 loginPage()
             })
@@ -101,11 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     searchBtn.addEventListener("click", () => {
         event.preventDefault();
         whatUser(userObject);
-        // debugger
         let searchTerm = document.querySelector("#search_term").value;
-        // let container = document.querySelector(".container");
-        //container.innerText = "";
-        // const row = document.querySelector(".row");
         const main = document.querySelector(".album");
         const container = document.querySelector(".album > .container");
         let row = document.querySelector(".album > .container > .row");
@@ -113,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
         container.append(row);
         main.append(container)
         searchForBook(searchTerm, userObject)
-        searchTerm.value = "";
     })
     const homeIcon = document.querySelector("#navbar");
     homeIcon.addEventListener("click", () => {
@@ -126,23 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 })
 
-
-//stopped working here
-
-
-
 function renderWatchlist(userObject) {
     let bookIdArray = []
     let watchlistIdArray = []
     const mainDiv = document.querySelector(".album");
-    // debugger;
     const container = document.querySelector(".album > .container");
-    // debugger
     let row = document.querySelector(".album > .container > .row");
-    // const container = document.querySelector(".container");
-    // container.dataset.id = userObject.id
-    //container.innerHTML = "";
-    // const row = document.querySelector(".row");
     row.innerHTML = ""
     fetch("http://localhost:3000/watchlists")
     .then(response => response.json())
@@ -158,11 +122,9 @@ function renderWatchlist(userObject) {
     .then(response => response.json())
     .then(json => json.forEach(b => {
         if (bookIdArray.includes(b.id)) {
-
             const bookDiv = document.createElement("div");
-            bookDiv.classList = "col-md-4";//.add("card-body");//book")
+            bookDiv.classList = "col-md-4";
             bookDiv.dataset.id = userObject.id;
-            // bookDiv.style = "width: 21em;"
             const lastBookDiv = document.createElement("div");
             lastBookDiv.classList = "card md-4 box-shadow"
             const bookImg = document.createElement("img");
@@ -171,14 +133,9 @@ function renderWatchlist(userObject) {
             const cardBodyDiv = document.createElement("div");
             cardBodyDiv.classList = "card-body";    
             const bookTitle = document.createElement("h4");
-            bookTitle.classList.add("card-text")//book_title");
-            // bookTitleDiv.style = "text-align: center; font-weight: bold;"
+            bookTitle.classList.add("card-text")
             const bookDesc = document.createElement("p");
-            bookDesc.classList.add("card-text")//book_desc");
-            // bookDescDiv.style = "text-align: center;"
-            // const newImgDiv = document.createElement("div");
-            // newImgDiv.classList = "card-image";
-            // const bookImgDiv = document.createElement("img");
+            bookDesc.classList.add("card-text")
             const outterBtnDiv = document.createElement("div");
             outterBtnDiv.classList = "d-flex justify-content-between align-items-center";
             const innerBtnDiv = document.createElement("div");
@@ -187,18 +144,14 @@ function renderWatchlist(userObject) {
             watchlistDeleteBtn.innerText = "Delete";
             watchlistDeleteBtn.id = "delete";
             watchlistDeleteBtn.addEventListener("click", () => deleteWatchlist(userObject, b, watchlistIdArray[bookIdArray.indexOf(b.id)]));
-            // bookImgDiv.classList = ("bd-placeholder-img card-img-top");//book_img");
             bookTitle.innerText = b.title;
-            // bookDescDiv.innerText = b.description;
             if (!!b.snippet) {
                 bookDesc.innerText = b.snippet
             }else {
                 bookDesc.innerText = b.description;
             }
             bookImg.src = b.image;
-            // debugger;
             bookImg.addEventListener("click", () => showBook(b, userObject))
-
             innerBtnDiv.append(watchlistDeleteBtn);
             outterBtnDiv.append(innerBtnDiv);
             cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv);
@@ -207,11 +160,6 @@ function renderWatchlist(userObject) {
             row.appendChild(bookDiv);
             container.appendChild(row);
             mainDiv.appendChild(container)
-            // newImgD.appendChild(bookImgDiv);
-            // // newImgDiv.style = `background: url(${bookImgDiv.src});`
-            // bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistDeleteBtn);
-            // row.appendChild(bookDiv);
-            // container.appendChild(row)//bookDiv);
         }
     }))
 
@@ -219,15 +167,10 @@ function renderWatchlist(userObject) {
 
 function deleteWatchlist(userObject, book, watchlistId) {
     console.log(userObject, book);
-    // console.log(book).
-    // debugger
-
     fetch(`http://localhost:3000/watchlists/${watchlistId}`, {
         method: "DELETE"
     })
-    // debugger
     event.currentTarget.parentElement.parentElement.parentElement.parentElement.parentElement.remove()
-    // event.target.parentElement.remove()
 }
 
 function whatUser(userObject){
@@ -258,30 +201,22 @@ function fetchBooks() {
 
 function renderBook(book, userObject) {
     const mainDiv = document.querySelector(".album");
-    // debugger;
     const container = document.querySelector(".album > .container");
-    // debugger
     let row = document.querySelector(".album > .container > .row");
     const bookDiv = document.createElement("div");
-    bookDiv.classList = "col-md-4";//.add("card-body");//book")
-    //bookDiv.style = "width: 21em;"
+    bookDiv.classList = "col-md-4";
     const lastBookDiv = document.createElement("div");
     lastBookDiv.classList = "card md-4 box-shadow"
-    // const newImgDiv = document.createElement("div");
-    // newImgDiv.classList = "card-image";
     const bookImg = document.createElement("img");
-    bookImg.classList = "card-img-top";// ("bd-placeholder-img card-img-top");//book_img");
+    bookImg.classList = "card-img-top";
     bookImg.alt = "Card image cap"
     const cardBodyDiv = document.createElement("div");
     cardBodyDiv.classList = "card-body";
     const bookTitle = document.createElement("h4");
-    bookTitle.classList.add("card-text")//book_title");
-    // bookTitleDiv.style = "text-align: center; font-weight: bold;"
+    bookTitle.classList.add("card-text")
     bookTitle.innerText = book.volumeInfo.title;
     const bookDesc = document.createElement("p");
-    bookDesc.classList.add("card-text")//book_desc");
-    // bookDescDiv.style = "text-align: center;"
-
+    bookDesc.classList.add("card-text")
     if ("searchInfo" in book) {
         bookDesc.innerText = book.searchInfo.textSnippet
     }else {
@@ -294,7 +229,7 @@ function renderBook(book, userObject) {
     const innerBtnDiv = document.createElement("div");
     innerBtnDiv.classList = "btn-group";
     const watchlistBtn = document.createElement("button");
-    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
+    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";
     watchlistBtn.dataset.id = userObject.id;
     watchlistBtn.innerText = "Add to watchlist";
     watchlistBtn.addEventListener("click", () => {
@@ -303,17 +238,11 @@ function renderBook(book, userObject) {
     innerBtnDiv.append(watchlistBtn);
     outterBtnDiv.append(innerBtnDiv);
     cardBodyDiv.append(bookTitle, bookDesc, outterBtnDiv)
-    //newImgDiv.appendChild(bookImgDiv);
-    // newImgDiv.style = `background: url(${bookImgDiv.src});`
     lastBookDiv.append(bookImg, cardBodyDiv)
     bookDiv.append(lastBookDiv);
-    // debugger
     row.appendChild(bookDiv);
     container.appendChild(row);
     mainDiv.appendChild(container);
-    // bookDiv.append(newImgDiv, bookTitleDiv, bookDescDiv,  watchlistBtn);
-    // row.appendChild(bookDiv);
-    // container.appendChild(row)//bookDiv);
 }
 
 function createBook(book, userObject) {
@@ -332,16 +261,14 @@ function createBook(book, userObject) {
             rating: book.volumeInfo.averageRating,
             price: book.saleInfo.listPrice.amount,
             preview_link: book.volumeInfo.previewLink,
-            id: userObject.id//id
+            id: userObject.id
         }
-        // debugger;
     }else {
         bookData = {
             title: book.volumeInfo.title,
             description: book.volumeInfo.description,
             image: book.volumeInfo.imageLinks.smallThumbnail,
             snippet: null,
-            // snippet: book.searchInfo.textSnippet,
             publisher: book.volumeInfo.publisher,
             published_date: book.volumeInfo.publishedDate,
             isbn: null,
@@ -349,7 +276,7 @@ function createBook(book, userObject) {
             rating: null,
             price: null,
             preview_link: null,
-            id: userObject.id//id
+            id: userObject.id
         }
     }
     return fetch("http://localhost:3000/watchlists", { 
@@ -362,7 +289,6 @@ function createBook(book, userObject) {
 }
 
 function searchForBook(searchTerm, userObject) {
-    // debugger;
     if (event.target.parentElement.querySelector("#check1").checked) {
         fetch(`https://www.googleapis.com/books/v1/volumes?q=${searchTerm}`)
         .then(response => response.json())
@@ -372,6 +298,8 @@ function searchForBook(searchTerm, userObject) {
         .then(response => response.json())
         .then(json => json.items.forEach(book => renderBook(book, userObject)))
     }
+    let term = document.querySelector("#search_term");
+    term.value = ""
 }
 
 function selectOnlyThis(id) {
@@ -384,40 +312,31 @@ function selectOnlyThis(id) {
 
 function showBook(book, userObject) {
     const mainDiv = document.querySelector(".album");
-    // debugger;
     const container = document.querySelector(".album > .container");
-    // debugger
     let row = document.querySelector(".album > .container > .row");
     const bookDiv = document.createElement("div");
-    //let container = document.querySelector(".container");
-    // container.innerHTML = "";
-    //let row = document.querySelector(".row");
     row.innerHTML = ""
-    //const bookDiv = document.createElement("div");
-    bookDiv.classList = "col-md-4"//.add("card-body");//book")
-    // bookDiv.style = "width: 21em;"
+    bookDiv.classList = "col-md-4"
     const lastBookDiv = document.createElement("div");
     lastBookDiv.classList = "card md-4 box-shadow";
     const cardBodyDiv = document.createElement("div");
     cardBodyDiv.classList = "card-body";
     const bookTitle = document.createElement("h2");
-    bookTitle.classList.add("card-text");//book_title");
-    // bookTitle.style = "text-align: center; font-weight: bold;"
+    bookTitle.classList.add("card-text");
     const bookDesc = document.createElement("p");
-    bookDesc.classList.add("card-text");//book_desc");
-    // bookDesc.style = "text-align: center;"
+    bookDesc.classList.add("card-text");
     const bookImg = document.createElement("img");
-    bookImg.classList = ("card-img-top");//bd-placeholder-img card-img-top");//book_img");
+    bookImg.classList = ("card-img-top");
     const bookPub = document.createElement("p");
-    bookPub.classList = "card-text";//book_pub"
+    bookPub.classList = "card-text";
     const bookPubDate = document.createElement("p");
-    bookPubDate.classList = "card-text";//book_date";
+    bookPubDate.classList = "card-text";
     const bookISBN = document.createElement("p");
-    bookISBN.classList = "card-text";//book_isbn";
+    bookISBN.classList = "card-text";
     const bookCat = document.createElement("p");
-    bookCat.classList = "card-text";//book_cat";
+    bookCat.classList = "card-text";
     const bookRating = document.createElement("p");
-    bookRating.classList = "card-text";//book_rating";
+    bookRating.classList = "card-text";
     if ("volumeInfo" in book) {
         bookPub.innerText = `Publisher: ${book.volumeInfo.publisher}`;
         bookPubDate.innerText = `Publised on: ${book.volumeInfo.publishedDate}`;
@@ -426,12 +345,12 @@ function showBook(book, userObject) {
         bookRating.innerText = `Rating: ${book.volumeInfo.averageRating}`;
         if (book.saleInfo.saleability === "FOR_SALE") {
             const bookPrice = document.createElement("p");
-            bookPrice.classList = "card-text";//book_price";
+            bookPrice.classList = "card-text";
             bookPrice.innerText = `Price: $${book.saleInfo.listPrice.amount}`;
             const bookBuyLink = document.createElement("a");
             bookBuyLink.href = book.volumeInfo.previewLink;
             const buyLink = document.createElement("p");
-            buyLink.classList = "card-text";//book_link";
+            buyLink.classList = "card-text";
             buyLink.innerText = "Buy Now";
             bookBuyLink.appendChild(buyLink);
             bookDiv.append(bookPrice, bookBuyLink);
@@ -447,19 +366,18 @@ function showBook(book, userObject) {
         bookRating.innerText = `Rating: ${book.rating}`;
         if (book.price != null) {
             const bookPrice = document.createElement("p");
-            bookPrice.classList = "card-text";//book_price";
+            bookPrice.classList = "card-text";
             bookPrice.innerText = `Price: ${book.price}`;
             const bookBuyLink = document.createElement("a");
             bookBuyLink.href = book.preview_link;
             const buyLink = document.createElement("p");
-            buyLink.classList = "card-text";//book_link";
+            buyLink.classList = "card-text";
             buyLink.innerText = "Buy Now";
             bookBuyLink.appendChild(buyLink);
             bookDiv.append(bookPrice, bookBuyLink);
         }
         bookTitle.innerText = book.title;
         bookDesc.innerText = book.description;
-        // debugger
         bookImg.src = book.image;
     }
     bookImg.addEventListener("click", () => showBook(book, userObject))
@@ -468,7 +386,7 @@ function showBook(book, userObject) {
     const innerBtnDiv = document.createElement("div");
     innerBtnDiv.classList = "btn-group";
     const watchlistBtn = document.createElement("button");
-    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";//watchlist_btn");
+    watchlistBtn.classList = "btn btn-sm btn-outline-secondary";
     watchlistBtn.dataset.id = userObject.id;
     watchlistBtn.innerText = "Add to watchlist";
     watchlistBtn.addEventListener("click", () => {
@@ -482,10 +400,4 @@ function showBook(book, userObject) {
     row.appendChild(bookDiv);
     container.appendChild(row);
     mainDiv.appendChild(container)
-
-    // bookDiv.append(bookImgDiv, bookTitleDiv, bookDescDiv, bookPubDiv, bookPubDateDiv, bookISBNDiv, bookCatDiv, bookRatingDiv, watchlistBtn);
-    // row.appendChild(bookDiv)
-    // container.appendChild(row);//bookDiv);
 }
-
-///fix showBook
